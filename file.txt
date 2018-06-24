@@ -1,0 +1,629 @@
+Variables ===================================
+Exercice 1 
+----------
+#! /bin/bash
+echo "Entrer le prix"
+read pht
+echo "entrer nbr articles"
+read nb
+
+echo "entrer le taux TVA"
+read ttva
+let "pttc=$nb*$pht*(1+$ttva)"
+echo "prix est $pttc"
+Exercice 2 
+----------
+echo "Vous avez entrer $# valeur(s)"
+let "res=($1+$2+$3+$4)/$#"
+echo "Moyenne est : $res"
+
+Exercice 3 
+----------
+
+#! /bin/bash
+
+let "a0=$1/1000"
+let "a1=($1-$a0*1000)/100"
+let "a2=($1-$a0*1000-$a1*100)/10"
+let "a3=($1-$a0*1000-$a1*100-$a2*10)"
+
+echo "$a3 + $a2 *10 + $a1 * 10 ^2 + $a0 * 10 ^ 3"
+=============================================
+
+Conditions ===================================
+Exercice 1 
+----------
+#! /bin/bash 
+ 
+echo "Entrer unr nombre"
+read nb
+if [ ! -z $nb ]
+then
+ if [ $nb -lt 0 ]
+ then 
+ echo "Negatif."
+ elif [ $nb -gt 0 ]
+ then 
+ echo "Positif"
+ else
+ echo "Null"
+ fi
+else
+echo "chaine vide"
+fi
+Exercice 2
+----------
+#! /bin/bash
+
+if [ -z $1 ]
+then
+echo "Entrer une chaine 1"
+read c1
+else
+let "c1 = $1"
+fi
+if [ -z $2 ]
+then
+echo "Entrer une chaine 2"
+read c2
+else
+let "c2 = $2"
+fi
+if [ $c1 = $c2 ]
+then
+echo "$c1 == $c2"
+else
+echo "$c1 != $c2"
+fi
+Exercice 3
+----------
+#! /bin/bash
+
+echo "1) Windows"
+echo "2) BeOs"
+echo "3) Linux"
+echo "4) Unix"
+
+read c
+
+case $c in 
+
+1 )
+echo "Dommage";;
+2 )
+echo "Peux mieux faire !";;
+3 )
+echo "Pas mal";;
+4 )
+echo "Super";;
+*)
+echo "choix invalide";;
+esac
+Exercice 4 
+----------
+#! /bin/bash
+
+    if [ -f $1 ]
+    then
+                echo "fichier" 
+    elif [ -d $2 ]
+    then
+                echo "Repertoire"
+    else
+                echo "Autre"
+    fi
+Exercice 5 
+----------
+#! /bin/bash
+
+if [ ! -e ~/Desktop/Cor ]
+then 
+$(mkdir ~/Desktop/Cor)
+fi
+
+if [ $1 = "-l" ]
+then 
+$(ls ~/Desktop/Cor/)
+elif [ $1 = "-r" ]
+then 
+$(rm ~/Desktop/Cor/*)
+elif [ ! $# -eq 0 ]
+then
+for i in $@
+do 
+$(mv $i ~/Desktop/Cor)
+done
+fi
+Exercice 6
+----------
+#! /bin/bash
+
+$(cat $1 $2 | sort > f4 )
+
+Boucles ===================================
+Exercice 1 
+----------
+#! /bin/bash
+
+let "i=1"
+let "s=0"
+for ((i=0;i<=100;i++))
+do 
+let "s=$s+$i"
+done
+
+echo "somme = $s"
+
+Exercice 2 
+----------
+#! /bin/bash
+
+let "f=0"
+let "d=0"
+
+for i in *
+do
+    if [ -f "$i" ]
+    then 
+    let "f=$f+1"
+    elif [ -d "$i" ]
+    then
+    let "d=$d+1"
+    fi
+done
+
+echo "D = $d , F = $f"
+Exercice 3 
+----------
+#! /bin/bash
+
+let "file =0"
+if [ -z $1 ]
+then 
+echo "Entrer le nom du fichier"
+read file
+else
+let "file=$1"
+echo $file
+fi
+
+if [ ! -e "$file" ]
+then 
+$(touch $file)
+fi
+let "taille=$(wc -c $file | cut -d " "  -f 1)"
+while [ $taille -lt 50 ]
+do 
+echo "Ajouter une ligne ($taille)"
+read l
+echo $l >> $file
+let "taille=$(wc -c $file | cut -d " "  -f 1)"
+done
+Exercice 4
+----------
+#! /bin/bash
+
+let "r=0"
+let "w=0"
+let "x=0"
+
+for i in *
+do
+    if [ -r "$i" ]
+    then 
+    let "r=$r+1"
+    fi
+    if [ -w "$i" ]
+    then
+    let "w=$w+1"
+    fi
+     if [ -x "$i" ]
+    then
+    let "x=$x+1"
+    fi
+   
+done
+
+echo "R = $r , W = $w , X = $x"
+Exercice 5 
+----------
+#! /bin/bash
+
+
+if [ $# -gt 0 ]
+then
+echo "1) gzip"
+echo "2) bzip2"
+echo "3) zip"
+
+echo -n "Votre choix? "
+read choix
+
+case $choix in 
+1) 
+for i in $@
+do
+tar -rvf $i.tar $i
+gzip $i.tar 
+done
+ ;;
+2)
+for i in $@
+do
+tar -rvf $i.tar $i
+ bzip2 $i.tar
+done
+
+;;
+3)
+for i in $@
+do
+zip $i.zip  $i  
+done
+;;
+*) 
+echo "choix invalide"
+esac
+fi
+
+
+Exercice 6 
+----------
+#! /bin/bash
+
+let "i=0"
+for v in $@
+do 
+tab[$i]=$v
+let "i=$i+1"
+done
+
+for v in ${tab[*]}
+do 
+echo $v >> tmp
+done
+
+
+let "i=0"
+
+for v in $(sort tmp)
+do 
+ tab[$i]=$v
+let "i=$i+1"
+done
+echo ${tab[*]}
+rm tmp
+
+Fonctions ===================================
+Exercice 1 
+----------
+#! /bin/bash
+
+function appreciation
+{
+    if [ $1 -ge 16 ] && [ $1 -le 20 ]
+    then 
+      echo "Tres Bien"
+    fi
+
+    if [ $1 -ge 14 ] && [ $1 -lt 16 ]
+    then 
+      echo "Bien"
+    fi
+
+    if [ $1 -ge 12 ] && [ $1 -lt 14 ]
+    then 
+      echo "Assez bien"
+    fi
+
+    if [ $1 -ge 10 ] && [ $1 -lt 12 ]
+    then 
+      echo "Moyen"
+    fi
+    if [ $1 -ge 0 ] && [ $1 -lt 10 ]
+    then 
+      echo "Insuffisant"
+    fi
+}
+
+#Main
+if [ -z $1 ]
+then 
+echo "Entrer la note"
+read note
+else
+let "note=$1"
+fi
+
+res=`appreciation $note`
+echo $res
+
+Exercice 2 
+----------
+#! /bin/bash
+
+function saisir
+{
+read nom
+echo $nom
+}
+
+function existe
+{
+    nom=`saisir`
+    res=`grep -c -e "$nom" /etc/passwd`
+    if [ "$res" != "0" ]
+    then 
+        echo "Existe"
+    else
+        echo "N existe pas"
+    fi
+}
+
+function uid
+{
+nom=`saisir`
+ id -u "$nom"
+}
+
+
+#Main
+
+c="t"
+
+while [ "$c" != "q" ]
+do 
+echo "1) Verifier l'existence."
+echo "2) Connaitre UID."
+echo "q) Quitter."
+
+read choix
+
+case $choix in 
+1 )  
+echo "Entrer le nom"
+existe
+;;
+2 ) 
+echo "Entrer le nom"
+uid
+;;
+q ) 
+c="q"
+;;
+*) echo "Choix invalide";;
+esac
+done
+Exercice 3 
+----------
+#! /bin/bash
+
+
+function test
+{
+if [ -z $1 ]
+then 
+echo "Entrer la valeur"
+read n
+else 
+n=$1
+fi
+return $n
+}
+function somme
+{
+ let "res=$1+$2"
+ echo $res
+}
+
+function mul
+{
+    let "res=$1*$2"
+ echo $res
+}
+
+function div
+{
+    if [ $2 -ne 0 ]
+    then
+    let "res=$1/$2"
+    else
+    echo "division impossible"
+    res="erreur"
+    fi
+ echo $res
+}
+function sous
+{
+    let "res=$1-$2"
+ echo $res
+}
+function Menu
+{
+echo "+"
+echo "-"
+echo "/"
+echo "x"
+}
+#main ==============================
+
+test $1
+n1=$?
+test $2
+n2=$?
+
+Menu
+let "i=$i+1"
+read choix
+
+case $choix in 
+
++) somme n1 n2;;
+-) sous n1 n2;;
+/) div n1 n2;;
+x) mul n1 n2;;
+*) echo "choix invalide";;
+esac
+
+
+Exercice 6 tri a bulle
+----------
+#! /bin/bash
+
+
+
+
+let "i=0"
+for v in $@
+do 
+tab[$i]=$v
+let "i=$i+1"
+done
+
+let "i=0"
+let "j=0"
+let "n=${#tab[*]}"
+
+for ((i=$n;$i > 0;i--))
+do 
+   for ((j=1; $j < $i ;j++))
+    do 
+    let "jtmp=$j-1"
+    if [ ${tab[$jtmp]} -gt ${tab[$j]} ]
+    then
+        tmp=${tab[$jtmp]}
+        tab[$jtmp]=${tab[$j]}
+        tab[$j]=$tmp
+    fi
+    done
+done
+
+
+for v in ${tab[*]}
+do 
+echo $v 
+done
+
+
+Exercice 7 
+----------
+#! /bin/bash
+
+
+
+
+
+let "i=0"
+for v in *
+do 
+tab[$i]="$v"
+let "i=$i+1"
+done
+
+let "i=0"
+let "j=0"
+let "n=${#tab[*]}"
+
+for ((i=$n;$i > 0;i--))
+do 
+   for ((j=1; $j < $i ;j++))
+    do 
+    let "jtmp=$j-1"
+    if [[ ${tab[$jtmp]} > ${tab[$j]} ]]
+    then
+        tmp=${tab[$jtmp]}
+        tab[$jtmp]=${tab[$j]}
+        tab[$j]=$tmp
+    fi
+    done
+done
+
+
+for v in ${tab[*]}
+do 
+echo $v 
+done
+Automatisation ================================
+Exercice 1
+----------
+ex.sh 
+
+#! /bin/bash
+
+
+date >> Processus.txt
+ps -f >> Processus.txt
+
+cron 
+5 * * * * root ex.sh 
+
+Exercie 2
+---------
+at 17:00 fri
+>./ex.sh
+ctr + D
+ 
+at 17:00 next week
+>./ex.sh
+ctr + D
+
+at now + 2 day
+>./ex.sh
+ctr + D
+
+Exercice 3 
+----------
+at 16:15 January 24 2017
+>./ex.sh
+ctr + D
+
+Exercice 4
+----------
+*/1 * * * * root command
+Exercice 5
+----------
+
+45 7,13 * * * root find * -mtime +1  -exec rm {} \;
+AWK =======================================================
+Exercice 1 
+----------
+1.
+awk -F ";" 'END{print NR}' test.txt
+2.
+awk -F ";" 'END{print NR,FNR}' test.txt test.txt
+3.
+awk -F ";" '{print NR,NF,$NF}' test.txt
+
+Exercice 2
+----------
+1.
+awk -F ":" 'END {print $NF}' test.txt
+2.
+awk -F ":" '
+BEGIN{print "Forat : \n"}
+$0 ~ /^*user*system*...$/ {print $NR" : "$0}
+END {print "Total : "$NR}
+' test.txt
+Exercice 3
+----------
+awk -F ":" '
+BEGIN {print "Test:"}
+$3 ~ /^[0-9]*$/{print "Pro"$1"Ligne :"$NR" data :"$0}
+' test.txt
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
